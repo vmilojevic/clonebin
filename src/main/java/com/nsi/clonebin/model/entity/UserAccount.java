@@ -7,10 +7,10 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "user_account")
 @Data
 @NoArgsConstructor
-public class User {
+public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +23,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    public User(String username, String password) {
+    public UserAccount(String username, String password) {
         this.username = username;
         this.password = password;
     }

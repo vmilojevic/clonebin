@@ -1,7 +1,7 @@
 package com.nsi.clonebin.controller;
 
 import com.nsi.clonebin.model.dto.UserRegistrationDTO;
-import com.nsi.clonebin.security.UserService;
+import com.nsi.clonebin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    @ModelAttribute("user")
+    @ModelAttribute("userAccount")
     public UserRegistrationDTO userRegistrationDTO() {
         return new UserRegistrationDTO();
     }
