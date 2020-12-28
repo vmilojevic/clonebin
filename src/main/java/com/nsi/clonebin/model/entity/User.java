@@ -1,13 +1,15 @@
-package com.nsi.clonebin.model;
+package com.nsi.clonebin.model.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 @Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -20,5 +22,10 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
 }

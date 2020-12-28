@@ -1,6 +1,6 @@
 package com.nsi.clonebin.repository;
 
-import com.nsi.clonebin.model.User;
+import com.nsi.clonebin.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

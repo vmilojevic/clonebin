@@ -1,18 +1,18 @@
 package com.nsi.clonebin.security;
 
-import com.nsi.clonebin.model.User;
+import com.nsi.clonebin.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.UUID;
 
-public class UsersDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class UsersDetailsDTO implements org.springframework.security.core.userdetails.UserDetails {
 
-    private UUID id;
-    private String username;
-    private String password;
+    private final UUID id;
+    private final String username;
+    private final String password;
 
-    public UsersDetails(User user) {
+    public UsersDetailsDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
