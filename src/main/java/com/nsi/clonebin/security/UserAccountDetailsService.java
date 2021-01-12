@@ -1,7 +1,7 @@
 package com.nsi.clonebin.security;
 
-import com.nsi.clonebin.model.User;
-import com.nsi.clonebin.repository.UserRepository;
+import com.nsi.clonebin.model.entity.UserAccount;
+import com.nsi.clonebin.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,22 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UsersDetailsService implements UserDetailsService {
+public class UserAccountDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Autowired
-    public UsersDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserAccountDetailsService(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+        UserAccount userAccount = userAccountRepository.findByUsername(username);
+        if (userAccount == null) {
             throw new UsernameNotFoundException(String.format("User with username %s not found.", username));
         }
-        return new UsersDetails(user);
+        return new UserAccountDetails(userAccount);
     }
 }
