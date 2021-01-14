@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
     </head>
     <body>
-        <div  th:fragment="create_paste">
-            <div class="container text-left">    
+        <div th:fragment="create_paste">
+            <div class="container text-left">
                 <div class="form-group">
                     <label for="comment">New Paste:</label>
                     <textarea class="form-control" rows="15" id="comment" style=""></textarea>
                 </div>
             </div>
-            <div class="container text-center">   
+            <div class="container text-center">
                 <div class="form-group">
                     <label for="pasteExpirationSelect" class="col-sm-2 control-label">Paste expiration: </label>
                     <div class="col-sm-4">
@@ -24,7 +24,6 @@
                             <option>1 Month</option>
                             <option>1 Year</option>
                         </select>
-
                     </div>
                 </div>
             </div>

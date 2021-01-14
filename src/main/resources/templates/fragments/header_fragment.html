@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
-
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
@@ -18,10 +18,11 @@
                     </button>
                     <a class="navbar-brand" href="#" th:href="@{/}">CloneBin</a>
                 </div>
-                <div id="navbar" class="collapse navbar-collapse navbar-right">
+                <div id="myNavbar" class="collapse navbar-collapse navbar-right">
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Dropdown Example
                                 <span class="caret"></span></button>
                             <ul class="dropdown-menu">
                                 <li><a href="#">HTML</a></li>
@@ -42,7 +43,7 @@
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
                     <ul class="nav navbar-nav">
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">
-                                <span class="glyphicon glyphicon-log-in"></span> Login</a>
+                            <span class="glyphicon glyphicon-log-in"></span> Login</a>
                         </li>
                     </ul>
                 </div>

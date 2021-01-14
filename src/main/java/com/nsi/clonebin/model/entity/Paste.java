@@ -1,18 +1,16 @@
 package com.nsi.clonebin.model.entity;
 
-import java.sql.Timestamp;
-import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "paste")
 @Data
+@NoArgsConstructor
 public class Paste {
 
     @Id
@@ -33,17 +31,17 @@ public class Paste {
     private String content;
 
     @Column(name = "created_at", nullable = false)
-    private Timestamp cratedAt;
+    private LocalDateTime createdAt;
     
     @Column(name = "expires_at")
-    private Timestamp expiresAt;
+    private LocalDateTime expiresAt;
 
-    public Paste(UUID userId, UUID folderId, String title, String content, Timestamp cratedAt, Timestamp expiresAt) {
+    public Paste(UUID userId, UUID folderId, String title, String content, LocalDateTime createdAt, LocalDateTime expiresAt) {
         this.userId = userId;
         this.folderId = folderId;
         this.title = title;
         this.content = content;
-        this.cratedAt = cratedAt;
+        this.createdAt = createdAt;
         this.expiresAt = expiresAt;
     }
     

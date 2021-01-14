@@ -29,27 +29,25 @@
             <column name="id" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="pk_paste" nullable="false"/>
             </column>
-            <column name="user_id" type="UUID"></column>
-            <column name="folder_id" type="UUID"></column>
-            <column name="title" type="varchar(50)"></column>
-            <column name="content" type="varchar(2000)"></column>
+            <column name="user_id" type="UUID"/>
+            <column name="folder_id" type="UUID"/>
+            <column name="title" type="varchar(50)"/>
+            <column name="content" type="varchar(2000)"/>
             <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="expires_at" type="timestamp"></column>
-            
+            <column name="expires_at" type="timestamp"/>
         </createTable>
         
         <createTable tableName="folder">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="pk_folder" nullable="false"/>
             </column>
-            <column name="user_id" type="UUID"></column>
-            <column name="name" type="varchar(50)"></column>
+            <column name="user_id" type="UUID"/>
+            <column name="name" type="varchar(50)"/>
             <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            
         </createTable>  
         
         <addForeignKeyConstraint baseTableName="paste"
@@ -67,7 +65,6 @@
                                  referencedColumnNames="id"
                                  onUpdate="RESTRICT"
                                  onDelete="CASCADE"/>
-
     </changeSet>
 
 </databaseChangeLog>
