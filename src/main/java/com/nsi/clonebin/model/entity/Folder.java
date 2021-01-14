@@ -1,19 +1,16 @@
 package com.nsi.clonebin.model.entity;
 
-//@Entity
-import java.sql.Timestamp;
-import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "folder")
 @Data
+@NoArgsConstructor
 public class Folder {
 
     @Id
@@ -28,12 +25,12 @@ public class Folder {
     private String name;
 
     @Column(name = "created_at", nullable = false)
-    private Timestamp cratedAt;
+    private LocalDateTime createdAt;
 
-    public Folder(UUID userId, String name, Timestamp cratedAt) {
+    public Folder(UUID userId, String name, LocalDateTime createdAt) {
         this.userId = userId;
         this.name = name;
-        this.cratedAt = cratedAt;
+        this.createdAt = createdAt;
     }
 
 }
