@@ -67,4 +67,32 @@
                                  onDelete="CASCADE"/>
     </changeSet>
 
+    <changeSet id="4" author="vladan.milojevic@elfak.rs">
+        <addColumn tableName="user_account">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="5" author="vladan.milojevic@elfak.rs">
+        <dropColumn tableName="paste">
+            <column name="created_at"/>
+        </dropColumn>
+        <dropColumn tableName="folder">
+            <column name="created_at"/>
+        </dropColumn>
+
+        <addColumn tableName="paste">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="folder">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
