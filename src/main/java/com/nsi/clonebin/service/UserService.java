@@ -26,4 +26,9 @@ public class UserService {
                 passwordEncoder.encode(registrationDTO.getPassword()));
         return userAccountRepository.save(userAccount);
     }
+
+    @Transactional(readOnly = true)
+    public UserAccount getByUsername(String username) {
+        return userAccountRepository.findByUsername(username);
+    }
 }

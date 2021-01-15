@@ -95,4 +95,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="6" author="vladan.milojevic@elfak.rs">
+        <addUniqueConstraint tableName="user_account"
+                             columnNames="username"
+                             constraintName="uq_user_account_username"/>
+    </changeSet>
+
 </databaseChangeLog>
