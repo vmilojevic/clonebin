@@ -2,7 +2,7 @@ package com.nsi.clonebin.controller;
 
 import com.nsi.clonebin.model.dto.UserRegistrationDTO;
 import com.nsi.clonebin.model.entity.UserAccount;
-import com.nsi.clonebin.service.UserService;
+import com.nsi.clonebin.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/registration")
 public class RegistrationController {
 
-    private final UserService userService;
+    private final UserAccountService userAccountService;
 
     @Autowired
-    public RegistrationController(UserService userService) {
-        this.userService = userService;
+    public RegistrationController(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
     @ModelAttribute("userAccount")
@@ -33,11 +33,12 @@ public class RegistrationController {
 
     @PostMapping
     public String registerUser(@ModelAttribute("userAccount") UserRegistrationDTO registrationDTO) {
-        UserAccount userAccount = userService.getByUsername(registrationDTO.getUsername());
+        UserAccount userAccount = userAccountService.getByUsername(registrationDTO.getUsername());
         if (userAccount == null) {
-            userService.save(registrationDTO);
+            userAccountService.save(registrationDTO);
             return "redirect:/registration?success";
         }
+        // TODO: thrown an error here and handle it in ErrorHandler
         return "redirect:/registration?duplicateUsername";
     }
 }
