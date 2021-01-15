@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService {
+public class UserAccountService {
 
     private final UserAccountRepository userAccountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserAccountRepository userAccountRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserAccountService(UserAccountRepository userAccountRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
     }

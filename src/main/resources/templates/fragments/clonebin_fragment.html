@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>Clonebin</title>
@@ -14,6 +13,32 @@
               crossorigin="anonymous">
     </head>
     <body>
-
+        <div th:fragment="clonebin" class="container">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>TITLE</th>
+                        <th>ADDED</th>
+                        <th>EXPIRES</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="paste: ${pastes}">
+                        <td>
+                            <a th:text="${paste.title}" th:href="@{'/' + ${paste.id}}"/>
+                        </td>
+                        <td th:text="${paste.createdAt}"/>
+                        <td th:text="${paste.expiresAt}"/>
+                        <td>
+                            <div th:if="${isOwner}" class="row">
+                                <a th:href="@{'/edit/' + ${paste.id}}" class="btn btn-info" style="width: 75px">Edit</a>
+                                <a th:href="@{'/delete/' + ${paste.id}}" class="btn btn-danger" style="width: 75px">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </body>
 </html>
