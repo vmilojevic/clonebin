@@ -37,7 +37,6 @@ public class RegistrationController {
         if (userAccount == null) {
             userService.save(registrationDTO);
             return "redirect:/registration?success";
-
         }
         return "redirect:/registration?duplicateUsername";
     }
