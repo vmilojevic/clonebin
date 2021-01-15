@@ -20,6 +20,8 @@
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
 
+                    <h1>Sign Up Page</h1>
+
                     <!-- success message -->
                     <div th:if="${param.success}">
                         <div class="alert alert-info">You've successfully registered
@@ -27,7 +29,10 @@
                         </div>
                     </div>
 
-                    <h1>Sign Up Page</h1>
+                    <div th:if="${param.duplicateUsername}">
+                        <div class="alert alert-danger">A user with that username already exists!
+                        </div>
+                    </div>
 
                     <form th:action="@{/registration}" method="post" th:object="${userAccount}">
                         <div class="form-group">
