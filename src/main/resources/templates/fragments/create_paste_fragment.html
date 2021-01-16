@@ -4,6 +4,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
+<!--        <script>-->
+<!--            function showNewFolderGroup() {-->
+<!--                var x = document.getElementById("newFolderGroup");-->
+<!--                x.style.display = "block";-->
+<!--            }-->
+<!--        </script>-->
     </head>
     <body>
         <form th:fragment="create_paste(isEdit)" th:action="@{/createOrEditPaste}"
@@ -33,7 +39,7 @@
                                     th:value="${period}" th:text="${period.getDescription()}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-3 checkbox">
+                    <div th:if="${isEdit}" class="col-sm-3 checkbox">
                         <label><input type="checkbox" th:field="*{changeExpiresAt}">Update expiration time</label>
                     </div>
                 </div>
@@ -48,8 +54,20 @@
                                     th:selected="${folder.getId()==folderId}"></option>
                         </select>
                     </div>
+                    <div class="col-sm-3">
+                        <button type="button" onclick="document.getElementById('newFolderGroup').style.display = 'block'"
+                                class="btn btn-info glyphicon glyphicon-plus"/>
+                    </div>
                 </div>
-
+            </div>
+            <br>
+            <div id="newFolderGroup" class="container text-left" style="display: none;">
+                <div class="form-group">
+                    <label for="newFolderName" class="col-sm-2 control-label">New Folder:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="newFolderName" th:field="*{newFolderName}">
+                    </div>
+                </div>
             </div>
             <br>
             <div class="container text-left">
@@ -71,5 +89,12 @@
                 </div>
             </div>
         </form>
+
+<!--        <script>-->
+<!--            function showNewFolderGroup() {-->
+<!--                var x = document.getElementById("newFolderGroup");-->
+<!--                x.style.display = "block";-->
+<!--            }-->
+<!--        </script>-->
     </body>
 </html>

@@ -19,6 +19,7 @@ public class CreateOrEditPasteDTO {
     private String expiresAt;
     private PasteExpiringEnum expiringEnum;
     private boolean changeExpiresAt;
+    private String newFolderName;
 
     public CreateOrEditPasteDTO(Paste paste) {
         this.id = paste.getId();
