@@ -10,7 +10,7 @@
               th:object="${paste}" method="post">
             <div class="container text-left">
                 <div class="form-group">
-                    <label for="comment" th:text="*{id}">New Paste:</label>
+                    <input type="hidden" th:field="*{id}">
                     <textarea class="form-control" rows="15" id="comment" style="" th:field="*{content}"></textarea>
                 </div>
             </div>
