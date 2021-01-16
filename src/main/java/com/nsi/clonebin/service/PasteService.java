@@ -25,7 +25,7 @@ public class PasteService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiresAt = null;
         if (pasteDTO.getExpiresIn() != PasteExpiringEnum.NEVER) {
-            expiresAt = now.plus(pasteDTO.getExpiresIn().getPeriodInMillis(), ChronoUnit.MILLIS);
+            expiresAt = now.plus(pasteDTO.getExpiresIn().getValue(), pasteDTO.getExpiresIn().getChronoUnit());
         }
 
         Paste newPaste = new Paste(pasteDTO.getUserId(), pasteDTO.getFolderId(), pasteDTO.getTitle(), pasteDTO.getContent(), now, expiresAt);
@@ -42,7 +42,7 @@ public class PasteService {
         paste.setFolderId(pasteDTO.getFolderId());
 
         if (pasteDTO.getExpiresIn() != PasteExpiringEnum.NEVER) {
-            LocalDateTime expiresAt = paste.getCreatedAt().plus(pasteDTO.getExpiresIn().getPeriodInMillis(), ChronoUnit.MILLIS);
+            LocalDateTime expiresAt = paste.getCreatedAt().plus(pasteDTO.getExpiresIn().getValue(), pasteDTO.getExpiresIn().getChronoUnit());
             paste.setExpiresAt(expiresAt);
         }
         paste.setContent(pasteDTO.getContent());

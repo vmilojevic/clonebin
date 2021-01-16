@@ -56,6 +56,15 @@
                     </div>
                 </div>
             </div>
+
+            <br>
+            <div class="container" >
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="alert alert-success text-center col-sm-4" th:if="${message}" th:text="${message}"></div>
+                    <div class="alert alert-danger text-center col-sm-4" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                </div>
+            </div>
         </form>
     </body>
 </html>

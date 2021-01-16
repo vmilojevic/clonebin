@@ -5,32 +5,40 @@
  */
 package com.nsi.clonebin.model.enums;
 
+import java.time.temporal.ChronoUnit;
+
 /**
  *
  * @author vlada
  */
 public enum PasteExpiringEnum {
-    NEVER("Never", null),
-    TEN_MINUTES("10 Minutes", "600000"),
-    ONE_HOUR("1 Hour", "3600000"),
-    ONE_WEEK("1 Week", "604800000"),
-    ONE_MONTH("1 Month", "2629800000"),
-    ONE_YEAR("1 Year", "31536000000");
+    NEVER("Never", null, null),
+    TEN_MINUTES("10 Minutes", 10, ChronoUnit.MINUTES),
+    ONE_HOUR("1 Hour", 1, ChronoUnit.HOURS),
+    ONE_WEEK("1 Week", 1, ChronoUnit.WEEKS),
+    ONE_MONTH("1 Month", 1, ChronoUnit.MONTHS),
+    ONE_YEAR("1 Year", 1, ChronoUnit.YEARS);
 
     private final String description;
-    private final String periodInMillis;
+    private final Integer value;
+    private final ChronoUnit chronoUnit;
 
-    private PasteExpiringEnum(String description, String periodInMillis) {
+    private PasteExpiringEnum(String description, Integer value, ChronoUnit chronoUnit) {
         this.description = description;
-        this.periodInMillis = periodInMillis;
+        this.value = value;
+        this.chronoUnit = chronoUnit;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public Long getPeriodInMillis() {
-        return Long.valueOf(periodInMillis);
+    public Integer getValue() {
+        return value;
+    }
+
+    public ChronoUnit getChronoUnit() {
+        return chronoUnit;
     }
 
 }

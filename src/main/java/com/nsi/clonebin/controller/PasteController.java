@@ -44,6 +44,22 @@ public class PasteController {
 
     @PostMapping("/createPaste")
     public ModelAndView pasteSubmit(@ModelAttribute PasteDTO paste) {
+        
+        ModelAndView modelAndView = new ModelAndView("index.html");
+        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
+            List<FolderDTO> folders = folderService.getFoldersForUser().stream()
+                    .map(f -> modelMapper.map(f, FolderDTO.class))
+                    .collect(Collectors.toList());
+            modelAndView.addObject("foldersList", folders);
+        }
+        
+        modelAndView.addObject("paste", new PasteDTO());
+        
+        if(paste.getContent() == null || paste.getContent().isEmpty()){
+             modelAndView.addObject("errorMessage", "You cannot create an empty paste.");
+             return modelAndView;
+        }
+        
         if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             UserAccount user = userService.getByUsername(username);
@@ -52,14 +68,12 @@ public class PasteController {
 
         pasteService.save(paste);
 
-        ModelAndView modelAndView = new ModelAndView("index.html");
-        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-            List<FolderDTO> folders = folderService.getFoldersForUser().stream()
-                    .map(f -> modelMapper.map(f, FolderDTO.class))
-                    .collect(Collectors.toList());
-            modelAndView.addObject("foldersList", folders);
+        
+        if (paste.getId() == null) {
+            modelAndView.addObject("message", "Your paste has been created successfully! :)");
+        } else {
+            modelAndView.addObject("message", "Your paste has been edited successfully! :)");
         }
-        modelAndView.addObject("paste", new PasteDTO());
         return modelAndView;
     }
 
@@ -76,4 +90,5 @@ public class PasteController {
 
         return modelAndView;
     }
+    
 }
