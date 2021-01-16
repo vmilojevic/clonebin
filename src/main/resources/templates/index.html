@@ -21,12 +21,7 @@
         <br>
         <br>
         <br>
-        <div class="container">
-            <div sec:authorize="isAuthenticated()">
-                Welcome <span sec:authentication="principal.username"> User</span>
-            </div>
-        </div>
         
-        <div th:replace="fragments/create_paste_fragment :: create_paste"></div>
+        <div th:replace="fragments/create_paste_fragment :: create_paste('false')"></div>
     </body>
 </html>

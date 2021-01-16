@@ -5,28 +5,57 @@
         <title>Title</title>
     </head>
     <body>
-        <div th:fragment="create_paste">
+        <form th:fragment="create_paste(isEdit)" action="#" th:action="@{/createPaste}" 
+              th:object="${paste}" method="post">
             <div class="container text-left">
                 <div class="form-group">
                     <label for="comment">New Paste:</label>
-                    <textarea class="form-control" rows="15" id="comment" style=""></textarea>
+                    <textarea class="form-control" rows="15" id="comment" style="" th:field="*{content}"></textarea>
                 </div>
             </div>
-            <div class="container text-center">
+            <br>
+            <div class="container text-left">
+                <div class="form-group">
+                    <label for="title" class="col-sm-2 control-label">Title:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="title" th:field="*{title}">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container text-left">
                 <div class="form-group">
                     <label for="pasteExpirationSelect" class="col-sm-2 control-label">Paste expiration: </label>
                     <div class="col-sm-4">
-                        <select class="form-control" id="pasteExpirationSelect">
-                            <option>Never</option>
-                            <option>10 Minutes</option>
-                            <option>1 Hour</option>
-                            <option>1 Week</option>
-                            <option>1 Month</option>
-                            <option>1 Year</option>
+                        <select class="form-control" id="pasteExpirationSelect" th:field="*{expiresIn}">
+                            <option th:each="period : ${T(com.nsi.clonebin.model.enums.PasteExpiringEnum).values()}" 
+                                    th:value="${period}" th:text="${period.getDescription()}"></option>
                         </select>
                     </div>
                 </div>
             </div>
-        </div>
+            <br>
+            <div class="container text-left" sec:authorize="isAuthenticated()">
+                <div class="form-group">
+                    <label for="pasteFolderSelect" class="col-sm-2 control-label">Folder: </label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="pasteFolderSelect" th:field="*{folderId}">
+                            <option th:each="folder : ${foldersList}" th:value="${folder.getId()}" th:text="${folder.getName()}" 
+                                    th:selected="${folder.getId()==folderId}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container text-left">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-primary" th:if= "${isEdit != null && isEdit == 'true'}">Edit Paste</button>
+                        <button type="submit" class="btn btn-primary" th:if= "${isEdit == null || isEdit != 'true'}">Create New Paste</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </body>
 </html>
