@@ -8,6 +8,7 @@ import com.nsi.clonebin.model.entity.UserAccount;
 import com.nsi.clonebin.security.CurrentUserService;
 import com.nsi.clonebin.service.FolderService;
 import com.nsi.clonebin.service.PasteService;
+import com.nsi.clonebin.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -28,13 +29,15 @@ public class PasteController {
     private final FolderService folderService;
     private final PasteService pasteService;
     private final CurrentUserService currentUserService;
+    private final UserAccountService userAccountService;
 
     @Autowired
     public PasteController(FolderService folderService, PasteService pasteService,
-                           CurrentUserService currentUserService) {
+                           CurrentUserService currentUserService, UserAccountService userAccountService) {
         this.folderService = folderService;
         this.pasteService = pasteService;
         this.currentUserService = currentUserService;
+        this.userAccountService = userAccountService;
     }
 
     @GetMapping("/{pasteId}")
@@ -43,10 +46,19 @@ public class PasteController {
         if (paste == null) {
             throw new NotFoundException("Could not find paste with id: " + pasteId);
         }
-        List<String> pasteLines = paste.getContent().lines().collect(Collectors.toList());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("paste");
+
+        List<String> pasteLines = paste.getContent().lines().collect(Collectors.toList());
         modelAndView.addObject("lines", pasteLines);
+        modelAndView.addObject("title", paste.getTitle());
+
+        if (paste.getUserId() == null) {
+            modelAndView.addObject("pasteOwner", "Guest");
+        } else {
+            UserAccount pasteOwner = userAccountService.getById(paste.getUserId());
+            modelAndView.addObject("pasteOwner", pasteOwner.getUsername());
+        }
 
         return modelAndView;
     }

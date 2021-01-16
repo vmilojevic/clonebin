@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class UserAccountService {
 
@@ -30,5 +32,10 @@ public class UserAccountService {
     @Transactional(readOnly = true)
     public UserAccount getByUsername(String username) {
         return userAccountRepository.findByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    public UserAccount getById(UUID id) {
+        return userAccountRepository.getOne(id);
     }
 }
