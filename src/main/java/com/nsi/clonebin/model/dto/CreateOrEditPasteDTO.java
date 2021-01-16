@@ -10,24 +10,22 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class PasteDTO {
+public class CreateOrEditPasteDTO {
 
     private UUID id;
-    private UUID userId;
     private UUID folderId;
     private String title;
     private String content;
-    private String createdAt;
     private String expiresAt;
-    private PasteExpiringEnum expiresIn;
+    private PasteExpiringEnum expiringEnum;
+    private boolean changeExpiresAt;
 
-    public PasteDTO(Paste paste) {
+    public CreateOrEditPasteDTO(Paste paste) {
         this.id = paste.getId();
-        this.userId = paste.getUserId();
         this.folderId = paste.getFolderId();
         this.title = paste.getTitle();
         this.content = paste.getContent();
-        this.createdAt = DateTimeUtil.formatLocalDateTime(paste.getCreatedAt());
         this.expiresAt = DateTimeUtil.getExpiresAtTime(paste.getExpiresAt());
+        this.changeExpiresAt = false;
     }
 }

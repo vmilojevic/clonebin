@@ -19,9 +19,9 @@ public class CurrentUserService {
 
     @Transactional(readOnly = true)
     public UserAccount getCurrentUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (username != null) {
-            return userAccountService.getByUsername(username);
+        UserAccountDetails user = (UserAccountDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user != null && user.getUsername() != null) {
+            return userAccountService.getByUsername(user.getUsername());
         } else {
             return null;
         }

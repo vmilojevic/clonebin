@@ -1,5 +1,7 @@
 package com.nsi.clonebin.util;
 
+import com.nsi.clonebin.model.enums.PasteExpiringEnum;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -48,6 +50,15 @@ public class DateTimeUtil {
         }
 
         return "Never";
+    }
+
+    public static LocalDateTime calucateExpiresAt(PasteExpiringEnum pasteExpiringEnum) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiresAt = null;
+        if (pasteExpiringEnum != PasteExpiringEnum.NEVER) {
+            expiresAt = now.plus(pasteExpiringEnum.getValue(), pasteExpiringEnum.getChronoUnit());
+        }
+        return expiresAt;
     }
 
     private static String formatPeriod(long diff, String period) {
