@@ -25,7 +25,7 @@ public class FolderService {
 
     @Autowired
     private ModelMapper modelMapper;
-
+    
     @Transactional
     public Folder save(String folderName) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
