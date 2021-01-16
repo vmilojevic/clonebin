@@ -1,6 +1,6 @@
 package com.nsi.clonebin.controller;
 
-import com.nsi.clonebin.model.dto.PasteDTO;
+import com.nsi.clonebin.model.dto.MyClonebinPasteDTO;
 import com.nsi.clonebin.model.entity.UserAccount;
 import com.nsi.clonebin.service.PasteService;
 import com.nsi.clonebin.service.UserAccountService;
@@ -34,7 +34,7 @@ public class UserAccountController {
             // TODO: thrown an error here and handle it in ErrorHandler
             return "not_found";
         }
-        List<PasteDTO> pastes = pasteService.getByUserId(userAccount.getId());
+        List<MyClonebinPasteDTO> pastes = pasteService.getByUserId(userAccount.getId());
         model.addAttribute("pastes", pastes);
 
         if (principal != null && principal.getName().equals(username)) {

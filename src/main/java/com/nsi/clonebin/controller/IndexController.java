@@ -1,12 +1,13 @@
 package com.nsi.clonebin.controller;
 
+import com.nsi.clonebin.model.dto.CreateOrEditPasteDTO;
 import com.nsi.clonebin.model.dto.FolderDTO;
-import com.nsi.clonebin.model.dto.PasteDTO;
 import com.nsi.clonebin.service.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,6 +23,11 @@ public class IndexController {
         this.folderService = folderService;
     }
 
+    @ModelAttribute("paste")
+    public CreateOrEditPasteDTO pasteDTO() {
+        return new CreateOrEditPasteDTO();
+    }
+
     @RequestMapping(value = "/")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index.html");
@@ -30,7 +36,7 @@ public class IndexController {
             List<FolderDTO> folders = folderService.getFoldersForUser();
             modelAndView.addObject("foldersList", folders);
         }
-        modelAndView.addObject("paste", new PasteDTO());
+//        modelAndView.addObject("paste", new PasteDTO());
         return modelAndView;
     }
 

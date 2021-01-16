@@ -1,16 +1,16 @@
 package com.nsi.clonebin.controller;
 
+import com.nsi.clonebin.model.dto.CreateOrEditPasteDTO;
 import com.nsi.clonebin.model.dto.FolderDTO;
-import com.nsi.clonebin.model.dto.PasteDTO;
+import com.nsi.clonebin.model.entity.Paste;
 import com.nsi.clonebin.model.entity.UserAccount;
+import com.nsi.clonebin.security.CurrentUserService;
 import com.nsi.clonebin.service.FolderService;
 import com.nsi.clonebin.service.PasteService;
-import com.nsi.clonebin.service.UserAccountService;
-import org.modelmapper.ModelMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,52 +19,35 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Controller
+@Slf4j
 public class PasteController {
 
-    private final UserAccountService userAccountService;
     private final FolderService folderService;
     private final PasteService pasteService;
-    private final ModelMapper modelMapper;
+    private final CurrentUserService currentUserService;
 
     @Autowired
-    public PasteController(UserAccountService userAccountService, FolderService folderService,
-                           PasteService pasteService, ModelMapper modelMapper) {
-        this.userAccountService = userAccountService;
+    public PasteController(FolderService folderService, PasteService pasteService,
+                           CurrentUserService currentUserService) {
         this.folderService = folderService;
         this.pasteService = pasteService;
-        this.modelMapper = modelMapper;
+        this.currentUserService = currentUserService;
     }
 
-    @PostMapping("/createPaste")
-    public ModelAndView pasteSubmit(@ModelAttribute PasteDTO paste) {
-        
-        ModelAndView modelAndView = new ModelAndView("index.html");
-        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-            List<FolderDTO> folders = folderService.getFoldersForUser().stream()
-                    .map(f -> modelMapper.map(f, FolderDTO.class))
-                    .collect(Collectors.toList());
-            modelAndView.addObject("foldersList", folders);
-        }
-        
-        modelAndView.addObject("paste", new PasteDTO());
-        
-        if(paste.getContent() == null || paste.getContent().isEmpty()){
-             modelAndView.addObject("errorMessage", "You cannot create an empty paste.");
-             return modelAndView;
-        }
-        
-        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            UserAccount user = userAccountService.getByUsername(username);
-            paste.setUserId(user.getId());
+    @PostMapping("/createOrEditPaste")
+    public ModelAndView pasteSubmit(@ModelAttribute CreateOrEditPasteDTO paste) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (!StringUtils.hasText(paste.getContent())) {
+            modelAndView.setViewName("index");
+            modelAndView.addObject("errorMessage", "You cannot create an empty paste.");
+            return modelAndView;
         }
 
-        pasteService.save(paste);
-
-        
+        Paste pasteEntity = pasteService.save(paste);
+        modelAndView.setViewName("redirect:/" + pasteEntity.getId());
         if (paste.getId() == null) {
             modelAndView.addObject("message", "Your paste has been created successfully! :)");
         } else {
@@ -73,33 +56,25 @@ public class PasteController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/editPaste")
-    public ModelAndView editPaste(@ModelAttribute PasteDTO paste) {
-        ModelAndView modelAndView = new ModelAndView("edit_paste.html");
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserAccount user = userAccountService.getByUsername(username);
-        paste.setUserId(user.getId());
-        List<FolderDTO> folders = folderService.getFoldersForUser();
-        modelAndView.addObject("foldersList", folders);
-        modelAndView.addObject("paste", paste);
-
-        return modelAndView;
-    }
-
     @RequestMapping("/edit/{pasteId}")
-    public String editPaste(@PathVariable String pasteId, Principal principal) {
-        // check if a user owns a paste
-        // if it does, redirect him to edit page
-        // else, redirect him to forbidden page
-        return "index";
+    public ModelAndView editPaste(@PathVariable String pasteId) {
+        Paste paste = pasteService.getById(UUID.fromString(pasteId));
+        UserAccount currentUser = currentUserService.getCurrentUser();
+        if (paste != null && paste.getUserId().equals(currentUser.getId())) {
+            ModelAndView modelAndView = new ModelAndView("edit_paste");
+            List<FolderDTO> folders = folderService.getFoldersForUser();
+            modelAndView.addObject("foldersList", folders);
+            CreateOrEditPasteDTO pasteDTO = new CreateOrEditPasteDTO(paste);
+            modelAndView.addObject("paste", pasteDTO);
+            return modelAndView;
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     @RequestMapping("/delete/{pasteId}")
     public String deletePaste(@PathVariable String pasteId, Principal principal) {
-        // check if a user owns a paste
-        // if it does, delete the paste and return him to my_clonebin page
-        // else, redirect him to forbidden page
-        return "index";
+        pasteService.delete(UUID.fromString(pasteId));
+        return "redirect:/u/" + principal.getName();
     }
 }

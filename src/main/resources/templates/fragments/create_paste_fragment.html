@@ -6,11 +6,11 @@
         <title>Title</title>
     </head>
     <body>
-        <form th:fragment="create_paste(isEdit)" action="#" th:action="@{/createPaste}" 
+        <form th:fragment="create_paste(isEdit)" th:action="@{/createOrEditPaste}"
               th:object="${paste}" method="post">
             <div class="container text-left">
                 <div class="form-group">
-                    <label for="comment">New Paste:</label>
+                    <label for="comment" th:text="*{id}">New Paste:</label>
                     <textarea class="form-control" rows="15" id="comment" style="" th:field="*{content}"></textarea>
                 </div>
             </div>
@@ -28,10 +28,13 @@
                 <div class="form-group">
                     <label for="pasteExpirationSelect" class="col-sm-2 control-label">Paste expiration: </label>
                     <div class="col-sm-4">
-                        <select class="form-control" id="pasteExpirationSelect" th:field="*{expiresIn}">
+                        <select class="form-control" id="pasteExpirationSelect" th:field="*{expiringEnum}">
                             <option th:each="period : ${T(com.nsi.clonebin.model.enums.PasteExpiringEnum).values()}" 
                                     th:value="${period}" th:text="${period.getDescription()}"></option>
                         </select>
+                    </div>
+                    <div class="col-sm-3 checkbox">
+                        <label><input type="checkbox" th:checked="*{changeExpiresAt}">Update expiration time</label>
                     </div>
                 </div>
             </div>
@@ -46,6 +49,7 @@
                         </select>
                     </div>
                 </div>
+
             </div>
             <br>
             <div class="container text-left">
