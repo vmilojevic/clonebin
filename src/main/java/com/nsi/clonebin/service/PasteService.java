@@ -50,6 +50,14 @@ public class PasteService {
         return pastes.stream().map(MyClonebinPasteDTO::new).collect(Collectors.toList());
     }
 
+    public List<MyClonebinPasteDTO> getByFolderId(UUID folderId) {
+        List<Paste> pastes = pasteRepository.findAllByFolderId(folderId);
+        if (CollectionUtils.isEmpty(pastes)) {
+            return new ArrayList<>();
+        }
+        return pastes.stream().map(MyClonebinPasteDTO::new).collect(Collectors.toList());
+    }
+
     @Transactional
     public Paste save(CreateOrEditPasteDTO createOrEditPasteDTO) {
         return createOrEditPasteDTO.getId() == null ? createPaste(createOrEditPasteDTO) : updatePaste(createOrEditPasteDTO);
