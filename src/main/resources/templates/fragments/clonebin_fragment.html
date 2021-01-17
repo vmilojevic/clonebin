@@ -18,7 +18,7 @@
                 <label th:text="${'Clonebin owner: ' + username}"/>
             </div>
             <br>
-            <div th:if="${isOwner}" class="container">
+            <div th:if="${isOwner && !isFolder}" class="container">
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
@@ -51,7 +51,7 @@
                     <tbody>
                         <tr th:each="paste: ${pastes}">
                             <td>
-                                <a th:text="${paste.title}" th:href="@{'/' + ${paste.id}}"/>
+                                <a th:text="${paste.title}" th:href="@{'/paste/' + ${paste.id}}"/>
                             </td>
                             <td th:text="${paste.createdAt}"/>
                             <td th:text="${paste.expiresAt}"/>

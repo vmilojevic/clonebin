@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class FolderController {
     }
 
     @GetMapping("/{folderId}")
-    public ModelAndView getFolder(@PathVariable("folderId") String folderId) {
+    public ModelAndView getFolder(@PathVariable("folderId") String folderId, Principal principal) {
         List<FolderDTO> folders = folderService.getFoldersForUser().stream()
                 .filter(folderDTO -> folderDTO.getId().equals(UUID.fromString(folderId)))
                 .collect(Collectors.toList());
@@ -42,9 +43,14 @@ public class FolderController {
             List<MyClonebinPasteDTO> pastes = pasteService.getByFolderId(UUID.fromString(folderId));
             ModelAndView modelAndView = new ModelAndView("folder");
             modelAndView.addObject("pastes", pastes);
-            modelAndView.addObject("isOwner", false);
+            modelAndView.addObject("isFolder", true);
             UserAccount user = userAccountService.getById(folders.get(0).getUserId());
             modelAndView.addObject("username", user.getUsername());
+            if (principal.getName().equals(user.getUsername())) {
+                modelAndView.addObject("isOwner", true);
+            } else {
+                modelAndView.addObject("isOwner", false);
+            }
             return modelAndView;
         } else {
             throw new NotFoundException("Could not find folder with id: " + folderId);

@@ -50,6 +50,7 @@ public class UserAccountController {
         } else {
             model.addAttribute("isOwner", false);
         }
+        model.addAttribute("isFolder", false);
         return "my_clonebin";
     }
 }

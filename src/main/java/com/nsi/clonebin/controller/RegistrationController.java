@@ -38,7 +38,6 @@ public class RegistrationController {
             userAccountService.save(registrationDTO);
             return "redirect:/registration?success";
         }
-        // TODO: thrown an error here and handle it in ErrorHandler
         return "redirect:/registration?duplicateUsername";
     }
 }

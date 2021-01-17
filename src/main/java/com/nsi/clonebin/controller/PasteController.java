@@ -40,7 +40,7 @@ public class PasteController {
         this.userAccountService = userAccountService;
     }
 
-    @GetMapping("/{pasteId}")
+    @GetMapping("/paste/{pasteId}")
     public ModelAndView showPaste(@PathVariable("pasteId") String pasteId) {
         Paste paste = pasteService.getById(UUID.fromString(pasteId));
         if (paste == null) {
