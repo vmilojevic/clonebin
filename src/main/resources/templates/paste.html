@@ -11,6 +11,28 @@
               href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
               integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
               crossorigin="anonymous">
+        <style>
+            table {
+                border: 1px solid lightgrey;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .ordinal {
+                text-align: right;
+                border-right: 1px solid lightgrey;
+                background-color: lightgrey;
+                width: 60px;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+            }
+
+            .line {
+                padding-left: 20px;
+                border-right: 1px solid lightgrey;
+            }
+        </style>
     <body>
         <div th:insert="fragments/header_fragment.html :: header"></div>
         <br>
@@ -18,7 +40,21 @@
         <br>
         <br>
         <br>
+        <div class="container text-left">
+            <label th:text="${'Paste owner: ' + pasteOwner}"/>
+        </div>
         <br>
-
+        <div class="container text-left">
+            <label th:text="${'Title: ' + title}"/>
+        </div>
+        <br>
+        <div class="container">
+            <table>
+                <tr th:each="line, iter: ${lines}">
+                    <td th:text="${iter.index + 1} + '.'" class="ordinal disabled"/>
+                    <td th:text="${line}" class="line"/>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

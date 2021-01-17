@@ -14,6 +14,8 @@ public interface PasteRepository extends JpaRepository<Paste, UUID> {
 
     List<Paste> findAllByUserId(UUID userId);
 
+    List<Paste> findAllByFolderId(UUID folderId);
+
     @Modifying
     Long deleteByExpiresAtBefore(LocalDateTime dateTime);
 }

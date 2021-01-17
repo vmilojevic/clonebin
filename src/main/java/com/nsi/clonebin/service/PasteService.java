@@ -2,6 +2,7 @@ package com.nsi.clonebin.service;
 
 import com.nsi.clonebin.model.dto.CreateOrEditPasteDTO;
 import com.nsi.clonebin.model.dto.MyClonebinPasteDTO;
+import com.nsi.clonebin.model.entity.Folder;
 import com.nsi.clonebin.model.entity.Paste;
 import com.nsi.clonebin.model.entity.UserAccount;
 import com.nsi.clonebin.repository.PasteRepository;
@@ -25,11 +26,14 @@ public class PasteService {
 
     private final PasteRepository pasteRepository;
     private final CurrentUserService currentUserService;
+    private final FolderService folderService;
 
     @Autowired
-    public PasteService(PasteRepository pasteRepository, CurrentUserService currentUserService) {
+    public PasteService(PasteRepository pasteRepository, CurrentUserService currentUserService,
+                        FolderService folderService) {
         this.pasteRepository = pasteRepository;
         this.currentUserService = currentUserService;
+        this.folderService = folderService;
     }
 
     @Transactional(readOnly = true)
@@ -40,6 +44,14 @@ public class PasteService {
     @Transactional(readOnly = true)
     public List<MyClonebinPasteDTO> getByUserId(UUID userId) {
         List<Paste> pastes = pasteRepository.findAllByUserId(userId);
+        if (CollectionUtils.isEmpty(pastes)) {
+            return new ArrayList<>();
+        }
+        return pastes.stream().map(MyClonebinPasteDTO::new).collect(Collectors.toList());
+    }
+
+    public List<MyClonebinPasteDTO> getByFolderId(UUID folderId) {
+        List<Paste> pastes = pasteRepository.findAllByFolderId(folderId);
         if (CollectionUtils.isEmpty(pastes)) {
             return new ArrayList<>();
         }
@@ -77,7 +89,10 @@ public class PasteService {
         paste.setFolderId(pasteDTO.getFolderId());
         paste.setCreatedAt(LocalDateTime.now());
         paste.setExpiresAt(DateTimeUtil.calucateExpiresAt(pasteDTO.getExpiringEnum()));
-
+        if (StringUtils.hasText(pasteDTO.getNewFolderName())) {
+            Folder folder = folderService.save(pasteDTO.getNewFolderName());
+            paste.setFolderId(folder.getId());
+        }
         return pasteRepository.save(paste);
     }
 
@@ -94,6 +109,10 @@ public class PasteService {
             paste.setFolderId(pasteDTO.getFolderId());
             if (pasteDTO.isChangeExpiresAt()) {
                 paste.setExpiresAt(DateTimeUtil.calucateExpiresAt(pasteDTO.getExpiringEnum()));
+            }
+            if (StringUtils.hasText(pasteDTO.getNewFolderName())) {
+                Folder folder = folderService.save(pasteDTO.getNewFolderName());
+                paste.setFolderId(folder.getId());
             }
             return pasteRepository.save(paste);
         } else {

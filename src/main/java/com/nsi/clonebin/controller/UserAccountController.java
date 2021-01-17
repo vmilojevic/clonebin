@@ -1,7 +1,10 @@
 package com.nsi.clonebin.controller;
 
+import com.nsi.clonebin.exception.NotFoundException;
+import com.nsi.clonebin.model.dto.FolderDTO;
 import com.nsi.clonebin.model.dto.MyClonebinPasteDTO;
 import com.nsi.clonebin.model.entity.UserAccount;
+import com.nsi.clonebin.service.FolderService;
 import com.nsi.clonebin.service.PasteService;
 import com.nsi.clonebin.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +23,27 @@ public class UserAccountController {
 
     private final UserAccountService userAccountService;
     private final PasteService pasteService;
+    private final FolderService folderService;
 
     @Autowired
-    public UserAccountController(UserAccountService userAccountService, PasteService pasteService) {
+    public UserAccountController(UserAccountService userAccountService, PasteService pasteService,
+                                 FolderService folderService) {
         this.userAccountService = userAccountService;
         this.pasteService = pasteService;
+        this.folderService = folderService;
     }
 
     @GetMapping("/{username}")
     public String showRegistrationFrom(@PathVariable String username, Model model, Principal principal) {
         UserAccount userAccount = userAccountService.getByUsername(username);
         if (userAccount == null) {
-            // TODO: thrown an error here and handle it in ErrorHandler
-            return "not_found";
+            throw new NotFoundException("Could not find user with username: " + username);
         }
+        model.addAttribute("username", userAccount.getUsername());
         List<MyClonebinPasteDTO> pastes = pasteService.getByUserId(userAccount.getId());
         model.addAttribute("pastes", pastes);
+        List<FolderDTO> folders = folderService.getFoldersForUser();
+        model.addAttribute("folders", folders);
 
         if (principal != null && principal.getName().equals(username)) {
             model.addAttribute("isOwner", true);

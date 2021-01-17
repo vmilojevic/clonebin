@@ -1,5 +1,6 @@
 package com.nsi.clonebin.controller;
 
+import com.nsi.clonebin.exception.NotFoundException;
 import com.nsi.clonebin.model.dto.CreateOrEditPasteDTO;
 import com.nsi.clonebin.model.dto.FolderDTO;
 import com.nsi.clonebin.model.entity.Paste;
@@ -7,34 +8,59 @@ import com.nsi.clonebin.model.entity.UserAccount;
 import com.nsi.clonebin.security.CurrentUserService;
 import com.nsi.clonebin.service.FolderService;
 import com.nsi.clonebin.service.PasteService;
-import lombok.extern.slf4j.Slf4j;
+import com.nsi.clonebin.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
-@Slf4j
 public class PasteController {
 
     private final FolderService folderService;
     private final PasteService pasteService;
     private final CurrentUserService currentUserService;
+    private final UserAccountService userAccountService;
 
     @Autowired
     public PasteController(FolderService folderService, PasteService pasteService,
-                           CurrentUserService currentUserService) {
+                           CurrentUserService currentUserService, UserAccountService userAccountService) {
         this.folderService = folderService;
         this.pasteService = pasteService;
         this.currentUserService = currentUserService;
+        this.userAccountService = userAccountService;
+    }
+
+    @GetMapping("/{pasteId}")
+    public ModelAndView showPaste(@PathVariable("pasteId") String pasteId) {
+        Paste paste = pasteService.getById(UUID.fromString(pasteId));
+        if (paste == null) {
+            throw new NotFoundException("Could not find paste with id: " + pasteId);
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("paste");
+
+        List<String> pasteLines = paste.getContent().lines().collect(Collectors.toList());
+        modelAndView.addObject("lines", pasteLines);
+        modelAndView.addObject("title", paste.getTitle());
+
+        if (paste.getUserId() == null) {
+            modelAndView.addObject("pasteOwner", "Guest");
+        } else {
+            UserAccount pasteOwner = userAccountService.getById(paste.getUserId());
+            modelAndView.addObject("pasteOwner", pasteOwner.getUsername());
+        }
+
+        return modelAndView;
     }
 
     @PostMapping("/createOrEditPaste")
@@ -56,7 +82,7 @@ public class PasteController {
         return modelAndView;
     }
 
-    @RequestMapping("/edit/{pasteId}")
+    @GetMapping("/edit/{pasteId}")
     public ModelAndView editPaste(@PathVariable String pasteId) {
         Paste paste = pasteService.getById(UUID.fromString(pasteId));
         UserAccount currentUser = currentUserService.getCurrentUser();
@@ -72,7 +98,7 @@ public class PasteController {
         }
     }
 
-    @RequestMapping("/delete/{pasteId}")
+    @GetMapping("/delete/{pasteId}")
     public String deletePaste(@PathVariable String pasteId, Principal principal) {
         pasteService.delete(UUID.fromString(pasteId));
         return "redirect:/u/" + principal.getName();
