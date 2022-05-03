@@ -100,33 +100,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-webapp-maven-plugin</artifactId>
-                <version>1.7.0</version>
-                <configuration>
-                    <schemaVersion>v2</schemaVersion>
-                    <resourceGroup>maven-plugin</resourceGroup>
-                    <appName>clonebin-app</appName>
-                    <region>North Europe</region>
-                    <runtime>
-                        <os>linux</os>
-                        <javaVersion>java11</javaVersion>
-                        <webContainer></webContainer>
-                    </runtime>
-                    <deployment>
-                        <resources>
-                            <resource>
-                                <directory>${project.basedir}/target</directory>
-                                <includes>
-                                    <include>*.jar</include>
-                                </includes>
-                            </resource>
-                        </resources>
-                    </deployment>
-                    <pricingTier>F1</pricingTier>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
