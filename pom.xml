@@ -17,7 +17,7 @@
     <properties>
         <java.version>11</java.version>
         <liquibase.version>4.8.0</liquibase.version>
-        <modelmapper.version>2.3.9</modelmapper.version>
+        <modelmapper.version>3.1.0</modelmapper.version>
     </properties>
 
     <dependencies>
@@ -84,6 +84,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${project.parent.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>
